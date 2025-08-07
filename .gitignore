@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.env
+api.env
+data/
+hackb/Lib/
+
+hackb/
