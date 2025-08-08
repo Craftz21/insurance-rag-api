@@ -11,3 +11,4 @@ pydantic
 huggingface-hub
 pymupdf
 sentence-transformers
+torch

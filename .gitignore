@@ -6,5 +6,6 @@ __pycache__/
 api.env
 data/
 hackb/Lib/
-
+chroma_insurance/
+*.pdf
 hackb/
