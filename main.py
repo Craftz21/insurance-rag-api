@@ -19,7 +19,7 @@ load_dotenv()
 def require_env(var_name: str) -> str:
     val = os.getenv(var_name)
     if not val:
-        raise RuntimeError(f"❌ Missing required environment variable: {var_name}")
+        raise RuntimeError(f" Missing required environment variable: {var_name}")
     return val
 
 GROQ_API_KEY = require_env("GROQ_API_KEY")
@@ -37,19 +37,24 @@ Question: {query}
 Answer:
 """
 
+# ------------------ LANGCHAIN COMPONENTS ------------------
 embedding = HuggingFaceEmbeddings(model_name=EMBED_MODEL)
 llm = ChatGroq(model_name=LLM_MODEL, api_key=GROQ_API_KEY)
 splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
 
-# ------------------ FASTAPI ------------------
+# ------------------ FASTAPI APP ------------------
 app = FastAPI()
 
-class Question(BaseModel):
-    query: str
+# ------------------ ROUTES ------------------
 
 @app.get("/")
 def home():
-    return {"message": "Groq-powered insurance RAG API is running."}
+    return {"message": "Groq-powered insurance RAG API is live."}
+
+# ------------- GENERAL QUESTION ASKING (WITH HARDCODED DOCS) -------------
+
+class Question(BaseModel):
+    query: str
 
 @app.post("/ask")
 def ask_question(q: Question):
@@ -84,6 +89,8 @@ def ask_question(q: Question):
         "sources": sources,
     }
 
+# ------------------ DEBUG RETRIEVAL ------------------
+
 @app.post("/debug-retrieval")
 def debug_retrieval(q: Question):
     dummy_docs = [
@@ -107,7 +114,7 @@ def debug_retrieval(q: Question):
         ]
     }
 
-# ------------------ HACKRX ENDPOINT ------------------
+# ------------------ HACKRX WEBHOOK ENDPOINT ------------------
 
 class HackRxInput(BaseModel):
     documents: str
@@ -121,6 +128,7 @@ async def hackrx_run(body: HackRxInput, authorization: str = Header(default=None
     pdf_url = body.documents
     questions = body.questions
 
+    # Step 1: Download & Read PDF
     try:
         pdf_response = requests.get(pdf_url)
         pdf_response.raise_for_status()
@@ -129,6 +137,7 @@ async def hackrx_run(body: HackRxInput, authorization: str = Header(default=None
     except Exception as e:
         return {"success": False, "error": f"PDF download/parse failed: {str(e)}"}
 
+    # Step 2: Prepare Vector DB
     try:
         documents = [Document(page_content=full_text)]
         split_docs = splitter.split_documents(documents)
@@ -137,6 +146,7 @@ async def hackrx_run(body: HackRxInput, authorization: str = Header(default=None
     except Exception as e:
         return {"success": False, "error": f"Vector index creation failed: {str(e)}"}
 
+    # Step 3: Answer each question
     answers = []
     for query in questions:
         try:

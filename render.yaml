@@ -1,0 +1,8 @@
+services:
+  - type: web
+    name: fastapi-groq-app
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: ./start.sh
+   env:
+  - GROQ_API_KEY: ${GROQ_API_KEY}
