@@ -1,5 +1,6 @@
 fastapi
 uvicorn
+groq
 chromadb
 langchain
 langchain-core
