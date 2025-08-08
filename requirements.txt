@@ -1,16 +1,47 @@
+# fastapi
+# uvicorn
+# langchain
+# langchainhub
+# langchain-core
+# langchain-community
+# chromadb
+# groq
+# huggingface-hub
+# sentence-transformers
+# pydantic
+# python-dotenv
+# requests
+# tqdm
+# PyPDF2
+# watchfiles
+# Core web framework
 fastapi
-uvicorn
-langchain
-langchainhub
-langchain-core
-langchain-community
-chromadb
-groq
-huggingface-hub
-sentence-transformers
-pydantic
-python-dotenv
-requests
-tqdm
+uvicorn[standard]
+
+# For PDF reading
 PyPDF2
-watchfiles
+
+# For handling environment variables
+python-dotenv
+
+# For making HTTP requests
+requests
+
+# LangChain ecosystem
+langchain
+langchain-community
+langchain-groq
+
+# Embedding models
+transformers
+sentence-transformers
+
+# Vector store
+faiss-cpu
+
+# Pydantic model (used by FastAPI, should match FastAPI version)
+pydantic>=1.10,<3.0
+
+# Optional: Sometimes helps with asyncio stability
+uvloop
+
