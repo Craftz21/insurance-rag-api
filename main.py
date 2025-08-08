@@ -6,7 +6,8 @@ from fastapi import FastAPI, Request, Header
 from pydantic import BaseModel
 from PyPDF2 import PdfReader
 
-from langchain_huggingface import HuggingFaceEmbeddings
+# from langchain_huggingface import HuggingFaceEmbeddings
+from langchain.embeddings import HuggingFaceEmbeddings
 from langchain_community.vectorstores import FAISS
 from langchain.prompts import ChatPromptTemplate
 from langchain_groq import ChatGroq
